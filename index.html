@@ -1,52 +1,51 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>たかみぃのたかみぃ</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="ページのキーワードA,B,C">
-    <meta name="description" content="ページの説明">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>タブと外部ファイル読み込み</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .tabs { display: flex; border-bottom: 2px solid #ccc; margin-bottom: 10px; }
+    .tab { padding: 10px 20px; cursor: pointer; border: 1px solid #ccc; border-bottom: none; background: #f9f9f9; }
+    .tab.active { background: #fff; font-weight: bold; border-top: 2px solid #0078d7; }
+    #content { border: 1px solid #ccc; padding: 15px; background-color: #fff; }
+  </style>
 </head>
 <body>
-    <div id="outer">
-        <div id="inner">
-            <header>
-                <h1>たかみぃのたかみぃ</h1>
-            </header>
-            <div id="container">
-                <main>
-                    <h2>スイーツの作り方</h2>
-                    <div id="main">
-                        <p>私はスイーツが大好き</p>
+  <h1>外部HTML読み込みタブ</h1>
 
-                        <h3>1番好きなスイーツ</h3>
-                        <p>いちごとブルーベリーのクレープ</p>
+  <div class="tabs">
+    <div class="tab active" data-file="sweets.html">スイーツ</div>
+    <div class="tab" data-file="sns.html">SNS</div>
+    <div class="tab" data-file="profile.html">プロフィール</div>
+  </div>
 
-                        <h4>2番目に好きなスイーツ</h4>
-                        <p>モンブラン</p>
-                    </div>
-                </main>
-                <aside>
-                    <div class="side-title">たかみぃのSNS</div>
-                    <div class="side">
-                        <ul>
-                            <li>
-                                <a href="https://www.instagram.com/takamiy0624/?igsh=MTNta2k1dGg3NGNpeQ%3D%3D&utm_source=qr#">
-                                    いんすた！
-                                </a>
-                            </li>
-                            <li><a href="#">?????</a></li>
-                        </ul>
-                    </div>
-                </aside>
-                <footer>
-                    © 2025 たかみぃのホームページ
-                </footer>
+  <!-- 読み込んだ内容を表示 -->
+  <div id="content">ここに外部HTMLの内容が表示されます</div>
 
-            </div>
-        </div>
-    </div>
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const content = document.getElementById("content");
+
+    function loadPage(file) {
+      fetch(file)
+        .then(response => response.text())
+        .then(data => {
+          content.innerHTML = data;
+        });
+    }
+
+    // 初期表示
+    loadPage("sweets.html");
+
+    // タブクリック時
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        loadPage(tab.dataset.file);
+      });
+    });
+  </script>
 </body>
 </html>
